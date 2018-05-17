@@ -43,7 +43,7 @@ gulp.task('js', () => {
             })
         }))
         .pipe(babel())
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(concat("main.js"))
         .pipe(plumber.stop())
         .pipe(gulp.dest('build/js'))

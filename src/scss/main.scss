@@ -9,7 +9,6 @@
 $primary-color:#364751;
 $secondary-color:#738D9C;
 $light-font-color:#DDD;
-$dark-font-color:#111;
 body {
     min-height: 100vh;
     width: 100vw;
@@ -27,12 +26,20 @@ body {
     margin: 0 20px;
     &__info {
         border-bottom: 1px solid $primary-color;
+        font-size: 150%;
+        font-weight: 600;
+    }
+    &__msg{
+        color:#a11;
+        margin-top: 10px;
+        transition:0.2s;
     }
     &__answers {
         list-style: none;
         padding: 0;
         li {
-            height: 30px;
+        	margin-top: 10px;
+            
 
         }
 
@@ -43,7 +50,7 @@ body {
             &+label {
 				cursor:pointer;
 				padding-top: 2px;
-                position: absolute;
+                position: relative;
                 display: inline-block;
                 padding-left: 25px;
                 &:before,
@@ -94,7 +101,6 @@ body {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-
     &__btn {
         box-sizing: border-box;
         margin: 0;
