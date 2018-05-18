@@ -29,18 +29,17 @@ body {
         font-size: 150%;
         font-weight: 600;
     }
-    &__msg{
-        color:#a11;
+    &__msg {
+        color: #a11;
         margin-top: 10px;
-        transition:0.2s;
+        transition: 0.2s;
+        min-height: 30px;
     }
     &__answers {
         list-style: none;
         padding: 0;
         li {
-        	margin-top: 10px;
-            
-
+            margin-top: 10px;
         }
 
         input[type=radio] {
@@ -48,8 +47,8 @@ body {
             position: relative;
 
             &+label {
-				cursor:pointer;
-				padding-top: 2px;
+                cursor: pointer;
+                padding-top: 2px;
                 position: relative;
                 display: inline-block;
                 padding-left: 25px;
@@ -78,10 +77,12 @@ body {
                     transition: .2s;
                 }
             }
-		 &:checked + label, &:hover + label{
-		 	&:after{opacity:1;}
-		 }
-
+            &:checked+label,
+            &:hover+label {
+                &:after {
+                    opacity: 1;
+                }
+            }
         }
 
 

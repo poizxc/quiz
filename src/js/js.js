@@ -11,16 +11,6 @@ const questions = [{
     answers: ["ansodp1", "ansodp2", "ansodp3", "ansodp4"],
     correctAns: "ansodp2",
 }];
-//hooks to navigation
-const submit = document.querySelector(".navigation__btn--submit");
-const prev = document.querySelector(".navigation__btn--prev");
-const next = document.querySelector(".navigation__btn--next");
-//hooks for questions and answers
-const info = document.querySelector(".quiz__info");
-const question = document.querySelector(".quiz__question");
-const answers = document.querySelector(".quiz__answers");
-const msgBox = document.querySelector(".quiz__msg");
-let msg = ""
 
 function Quiz(questions) {
     this.current = 0;
@@ -33,11 +23,11 @@ function Quiz(questions) {
 Quiz.prototype.addAnswers = function(ans) {
     this.userAnswers = [...this.userAnswers, ans]
 }
-Quiz.prototype.validate=function(){
-	console.log(this.correctAns)
-	console.log(this.userAnswers)
-	let score = this.correctAns.map((current,index)=>{return current===this.userAnswers[index]?1:0; }).reduce((a,b)=>{return a+b})
-	return score;
+Quiz.prototype.validate = function() {
+    console.log(this.correctAns)
+    console.log(this.userAnswers)
+    let score = this.correctAns.map((current, index) => { return current === this.userAnswers[index] ? 1 : 0; }).reduce((a, b) => { return a + b })
+    return score;
 }
 Quiz.prototype.removeAnswers = function(ans) {
     this.userAnswers.pop();
@@ -56,42 +46,56 @@ Quiz.prototype.changeQuestion = function() {
 
 const quizzz = new Quiz(questions);
 
+//hooks to navigation
+const submit = document.querySelector(".navigation__btn--submit");
+const prev = document.querySelector(".navigation__btn--prev");
+const next = document.querySelector(".navigation__btn--next");
+//adding listeners for navigation 
+next.addEventListener("click", ()=>{handleNext(quizzz)});
+prev.addEventListener("click", ()=>{handlePrev(quizzz)});
+submit.addEventListener("click", ()=>{handleSubmit(quizzz)});
+//hooks for questions and answers
+const info = document.querySelector(".quiz__info");
+const question = document.querySelector(".quiz__question");
+const answers = document.querySelector(".quiz__answers");
+const msgBox = document.querySelector(".quiz__msg");
+let msg = ""
 
-next.addEventListener("click", handleNext);
-prev.addEventListener("click", handlePrev);
-submit.addEventListener("click", handleSubmit);
-function handleSubmit(){
+function handleSubmit(obj) {
 
-	msg = quizzz.validate();
-	sendMsg(msg);
+    if (obj.userAnswers.length < obj.numOfQuestions  ) {
+        msg = `dokończ test`
+    } else {
+        msg = `twoj  wynik to ${obj.validate()} na ${obj.numOfQuestions}`
+    }
+   sendMsg(msg,msgBox);
 
 }
-function handlePrev() {
-    quizzz.removeAnswers();
-    quizzz.current > 0 ? quizzz.current -= 1 : msg = "nie mozesz cofnąć - to jest pierwsze pytanie";
-    (quizzz.current >= 0) && (quizzz.changeQuestion());
-    sendMsg(msg)
+
+function handlePrev(obj) {
+    obj.removeAnswers();
+    obj.current > 0 ? obj.current -= 1 : msg = "nie mozesz cofnąć - to jest pierwsze pytanie";
+    (obj.current >= 0) && (obj.changeQuestion());
+    sendMsg(msg,msgBox)
 }
 
 
-function handleNext() {
+function handleNext(obj) {
     let radio = document.querySelector("input[type='radio']:checked") ? document.querySelector("input[type='radio']:checked").value : '';
-
-
-	if (quizzz.current <= quizzz.numOfQuestions) { quizzz.addAnswers(radio); }
-    if (quizzz.current+1 < quizzz.numOfQuestions) {
-    	quizzz.current += 1
-        quizzz.changeQuestion()
+    if (obj.current <= obj.numOfQuestions && obj.userAnswers.length < obj.numOfQuestions ) { obj.addAnswers(radio); }
+    if (obj.current + 1 < obj.numOfQuestions) {
+        obj.current += 1
+        obj.changeQuestion()
     } else { msg = "nie mozesz przejsc dalej to juz ostatnie pytanie"; }
-    
-    sendMsg(msg)
+
+    sendMsg(msg,msgBox)
 
 }
 const init = () => {
     quizzz.changeQuestion();
 }
 init();
-const sendMsg = (content) => {
-    msgBox.innerText = content;
+const sendMsg=(content,container)=>{
+    container.innerText = content;
     msg = "";
 }
