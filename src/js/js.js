@@ -10,18 +10,6 @@ const questions = [{
     enquiry: "tresc pytania 3",
     answers: ["ansodp1", "ansodp2", "ansodp3", "ansodp4"],
     correctAns: "ansodp2",
-}, {
-    enquiry: "tresc pytania 3",
-    answers: ["ansodp1", "ansodp2", "ansodp3", "ansodp4"],
-    correctAns: "ansodp2",
-}, {
-    enquiry: "tresc pytania 3",
-    answers: ["ansodp1", "ansodp2", "ansodp3", "ansodp4"],
-    correctAns: "ansodp2",
-}, {
-    enquiry: "tresc pytania 3",
-    answers: ["ansodp1", "ansodp2", "ansodp3", "ansodp4"],
-    correctAns: "ansodp2",
 }];
 
 function Quiz(questions) {
