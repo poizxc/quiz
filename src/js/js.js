@@ -10,6 +10,18 @@ const questions = [{
     enquiry: "tresc pytania 3",
     answers: ["ansodp1", "ansodp2", "ansodp3", "ansodp4"],
     correctAns: "ansodp2",
+}, {
+    enquiry: "tresc pytania 3",
+    answers: ["ansodp1", "ansodp2", "ansodp3", "ansodp4"],
+    correctAns: "ansodp2",
+}, {
+    enquiry: "tresc pytania 3",
+    answers: ["ansodp1", "ansodp2", "ansodp3", "ansodp4"],
+    correctAns: "ansodp2",
+}, {
+    enquiry: "tresc pytania 3",
+    answers: ["ansodp1", "ansodp2", "ansodp3", "ansodp4"],
+    correctAns: "ansodp2",
 }];
 
 function Quiz(questions) {
@@ -20,36 +32,43 @@ function Quiz(questions) {
     this.correctAns = questions.map(obj => { return obj.correctAns });
     this.userAnswers = [];
     this.error = null;
+    this.score = null;
 };
-
-function clearError() {
-    this.error = null;
-}
-
 Quiz.prototype.next = function() {
-     this.error = null;
-     debugger;
-     this.numOfQuestions === this.current && this.userAnswers.length === this.numOfQuestions ? this.error = 'jestem zbyt wysoko' : this.current++;
-    sendMsg(this.error,msgBox);
+    this.addAnswers();
+    this.error = null;
+    if (this.numOfQuestions === this.current + 1) {
+        this.error = 'nie mozesz przejsc dalej, to ostatnie pytanie';
+    } else {
+        this.current += 1
+    }
+    if ((this.numOfQuestions) != this.userAnswers.length) {
+        this.changeQuestion();
+    };
+
+
+    sendMsg(this.error, msgBox);
 };
 
 Quiz.prototype.prev = function() {
     this.error = null;
-    this.current === 0 ? this.error = 'jestem zbyt nisko' : this.current--;
-    sendMsg(this.error,msgBox);
+    this.current === 0 ? this.error = 'nie mozesz cofnac, to jest pierwsze pytanie' : this.current--;
+    quizzz.removeAnswers();
+    quizzz.changeQuestion();
+    sendMsg(this.error, msgBox);
 };
 
-Quiz.prototype.addAnswers = function(ans) {
-    (this.userAnswers.length < this.numOfQuestions) && (this.userAnswers = [...this.userAnswers, ans])
+Quiz.prototype.addAnswers = function() {
+    let ans = document.querySelector("input[type='radio']:checked") ? document.querySelector("input[type='radio']:checked").value : null;
+    (this.userAnswers.length < this.numOfQuestions) && (this.userAnswers = [...this.userAnswers, ans]);
+    (this.userAnswers.length == this.numOfQuestions) && (this.userAnswers[this.current]=ans);
 }
 Quiz.prototype.validate = function() {
-    console.log(this.correctAns)
-    console.log(this.userAnswers)
-    let score = this.correctAns.map((current, index) => { return current === this.userAnswers[index] ? 1 : 0; }).reduce((a, b) => { return a + b })
-    return score;
+    this.score = this.correctAns.map((current, index) => { return current === this.userAnswers[index] ? 1 : 0; }).reduce((a, b) => { return a + b })
+    return this.score;
 }
-Quiz.prototype.removeAnswers = function(ans) {
-    this.userAnswers.pop();
+Quiz.prototype.removeAnswers = function() {
+    this.userAnswers.splice(this.current ,this.current +1)
 }
 Quiz.prototype.changeQuestion = function() {
     question.innerText = this.questions[this.current];
@@ -72,52 +91,35 @@ const next = document.querySelector(".navigation__btn--next");
 //adding listeners for navigation 
 next.addEventListener("click", handleNext);
 prev.addEventListener("click", handlePrev);
-submit.addEventListener("click",handleSubmit);
+submit.addEventListener("click", handleSubmit);
 //hooks for questions and answers
 const info = document.querySelector(".quiz__info");
 const question = document.querySelector(".quiz__question");
 const answers = document.querySelector(".quiz__answers");
 const msgBox = document.querySelector(".quiz__msg");
-let msg = ""
+
 
 function handleSubmit() {
-
-    if (obj.userAnswers.length < obj.numOfQuestions  ) {
-        msg = `dokończ test`
+    if (quizzz.userAnswers.length < quizzz.numOfQuestions) {
+        this.error = "dokoncz test";
     } else {
-        msg = `twoj  wynik to ${obj.validate()} na ${obj.numOfQuestions}`
+        this.error = `twoj  wynik to ${quizzz.validate()} na ${quizzz.numOfQuestions}`
     }
-   sendMsg(msg,msgBox);
+    sendMsg(this.error, msgBox);
 
 }
 
 function handlePrev() {
-  quizzz.prev();
-  quizzz.removeAnswers();
-  quizzz.changeQuestion();
+    quizzz.prev();
 }
 
 function handleNext() {
     quizzz.next();
-    let radio = document.querySelector("input[type='radio']:checked") ? document.querySelector("input[type='radio']:checked").value : null;
-    console.log(radio)
-    quizzz.addAnswers(radio);
-    quizzz.changeQuestion();
-    // 
-    // if (obj.current <= obj.numOfQuestions && obj.userAnswers.length < obj.numOfQuestions ) { obj.addAnswers(radio); }
-    // if (obj.current + 1 < obj.numOfQuestions) {
-    //     obj.current += 1
-    //     obj.changeQuestion()
-    // } else { msg = "nie mozesz przejsc dalej to juz ostatnie pytanie"; }
-
-    // sendMsg(msg,msgBox)
-
 }
 const init = () => {
     quizzz.changeQuestion();
 }
 init();
-const sendMsg=(content,container)=>{
+const sendMsg = (content, container) => {
     container.innerText = content;
-    msg = "";
 }
